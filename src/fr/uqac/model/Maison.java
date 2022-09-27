@@ -35,4 +35,15 @@ public class Maison {
             System.out.println();
         }
     }
+
+    public boolean isDirty(int i, int j) {
+        return grille[i][j] == 1;
+    }
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }
