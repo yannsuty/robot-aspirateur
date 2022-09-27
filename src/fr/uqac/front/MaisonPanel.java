@@ -15,8 +15,16 @@ public class MaisonPanel extends JPanel {
         this.setLayout(new GridLayout(maison.getWidth(), maison.getHeight()));
         for (int i = 0; i< maison.getWidth(); i++) {
             for (int j=0; j< maison.getHeight(); j++) {
-                this.casesMaison[i][j] = new CaseMaison(i,j, this.maison.isDirty(i,j));
+                this.casesMaison[i][j] = new CaseMaison(i,j, this.maison);
                 this.add(this.casesMaison[i][j]);
+            }
+        }
+    }
+
+    public void updateGUI() {
+        for (int i = 0; i< this.maison.getWidth(); i++) {
+            for (int j=0; j< this.maison.getHeight(); j++) {
+                this.casesMaison[i][j].updateGUI();
             }
         }
     }
