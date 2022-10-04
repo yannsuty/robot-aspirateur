@@ -1,16 +1,16 @@
 package fr.uqac.front;
 
+import fr.uqac.model.Agent;
 import fr.uqac.model.Environnement;
-import fr.uqac.model.Robot;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MaisonPanel extends JPanel {
     private Environnement maison;
-    private Robot robot;
+    private Agent robot;
     private CaseMaison[][] casesMaison;
-    public MaisonPanel(Environnement maison, Robot robot) {
+    public MaisonPanel(Environnement maison, Agent robot) {
         super();
         this.maison = maison;
         this.robot = robot;

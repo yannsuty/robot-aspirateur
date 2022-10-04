@@ -1,15 +1,15 @@
 package fr.uqac;
 //test
 import fr.uqac.front.MainFrame;
+import fr.uqac.model.Agent;
 import fr.uqac.model.Environnement;
-import fr.uqac.model.Robot;
 
 import java.awt.*;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         Environnement maison = new Environnement(5,5, 1);
-        Robot robot = new Robot(maison);
+        Agent robot = new Agent(maison);
         MainFrame mainFrame;
         int i = 0;
 

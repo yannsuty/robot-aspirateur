@@ -11,6 +11,8 @@ public class Agent {
 	private int etatBDI;
 	private int posX;
 	private int posY;
+	private int previousPosX;
+	private int previousPosY;
 	private Environnement maison;
 	
 	public Agent(Environnement maison) {
@@ -79,8 +81,25 @@ public class Agent {
 		}
 		return null;
 	}
+	public void randomMove() {
+		switch((int)(Math.ceil(Math.random()*4))) {
+			case 1:
+				moveUp();
+				break;
+			case 2:
+				moveDown();
+				break;
+			case 3:
+				moveLeft();
+				break;
+			case 4:
+				moveRight();
+				break;
+		}
+	}
 	public void moveUp() {
 		if (this.posY -1 >0) {
+			this.previousPosY=this.posY;
 			this.posY--;
 		}
 		else System.out.println("erreur up");
@@ -88,6 +107,7 @@ public class Agent {
 	
 	public void moveDown() {
 		if (this.posY +1 <maison.getHeight()) {
+			this.previousPosY=this.posY;
 			this.posY++;
 		}
 		else System.out.println("erreur down");
@@ -95,6 +115,7 @@ public class Agent {
 	
 	public void moveRight() {
 		if (this.posX +1 <maison.getWidth()) {
+			this.previousPosX=this.posX;
 			this.posX++;
 		}
 		else System.out.println("erreur right");
@@ -102,6 +123,7 @@ public class Agent {
 	
 	public void moveLeft() {
 		if (this.posX -1 >0) {
+			this.previousPosX=this.posX;
 			this.posX--;
 		}
 		else System.out.println("erreur left");
@@ -131,7 +153,15 @@ public class Agent {
 	public int getPosY() {
 		return this.posY;
 	}
-	
+
+	public int getPreviousPosX() {
+		return previousPosX;
+	}
+
+	public int getPreviousPosY() {
+		return previousPosY;
+	}
+
 	public int getUniteElec() {
 		return this.uniteElec;
 	}

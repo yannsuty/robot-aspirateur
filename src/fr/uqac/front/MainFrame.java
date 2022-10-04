@@ -1,14 +1,14 @@
 package fr.uqac.front;
 
+import fr.uqac.model.Agent;
 import fr.uqac.model.Environnement;
-import fr.uqac.model.Robot;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainFrame extends JFrame  {
     private MaisonPanel maisonPanel;
-    public MainFrame(String title, Dimension dimension, Environnement maison, Robot robot) {
+    public MainFrame(String title, Dimension dimension, Environnement maison, Agent robot) {
         super();
         this.setSize(dimension);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
