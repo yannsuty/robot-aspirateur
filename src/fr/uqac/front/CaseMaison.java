@@ -28,7 +28,7 @@ public class CaseMaison extends JPanel {
                 this.setBackground(new Color(100,100,100));
                 break;
             case DIAMANT:
-                this.setBackground(new Color(10,100,130));
+                this.setBackground(new Color(135,206,235));
                 break;
             case MIXE:
                 this.setBackground(new Color(1,11,60));
