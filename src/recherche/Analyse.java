@@ -2,14 +2,14 @@ package recherche;
 
 import java.util.ArrayList;
 
-import fr.uqac.model.Maison;
+import fr.uqac.model.Environnement;
 
 public class Analyse {
 	
-	private Maison m;
+	private Environnement m;
 	private ArrayList<Element> elems ;
 	
-	public Analyse(Maison m) {
+	public Analyse(Environnement m) {
 		this.m = m;
 		this.elems = new  ArrayList<Element>();
 	}

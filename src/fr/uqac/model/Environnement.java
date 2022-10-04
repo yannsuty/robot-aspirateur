@@ -1,34 +1,21 @@
 package fr.uqac.model;
 
-public class Maison {
-    private Dirt[][] grille;
+public class Environnement {
+    private Case[][] grille;
     private int width;
     private int height;
 
-    public enum Dirt {
-        PROPRE(0), POUSSIERE(1), DIAMANT(2), MIXE(3);
 
-        private int value;
-        Dirt(int value) {
-            this.value = value;
-        }
-        @Override
-        public String toString() {
-            return value+"";
-        }
-    }
-
-
-    public Maison(int width, int height) {
+    public Environnement(int width, int height) {
         this(width, height, 2);
     }
-    public Maison(int width, int height, int nb_dirt) {
+    public Environnement(int width, int height, int nb_dirt) {
         this.width = width;
         this.height = height;
-        this.grille = new Dirt[width][height];
+        this.grille = new Case[width][height];
         for (int i=0; i<this.width; i++) {
             for (int j=0; j<this.height; j++) {
-                this.grille[i][j]=Dirt.PROPRE;
+                this.grille[i][j]=new Case(i, j);
             }
         }
     }
@@ -50,17 +37,16 @@ public class Maison {
             posX = (int) (Math.floor(Math.random()*1000)%this.width);
             posY = (int) (Math.floor(Math.random()*1000)%this.height);
             i++;
-            System.out.println(posX + " : " + posY);
         }while(!this.addDirt(posX, posY));
-        System.out.println(i);
+        System.out.println(posX + " : " + posY);
     }
 
     public boolean addDirt(int posX, int posY) {
-        if (this.grille[posX][posY]!= Dirt.POUSSIERE) {
-            if (this.grille[posX][posY]==Dirt.DIAMANT) {
-                this.grille[posX][posY]=Dirt.MIXE;
+        if (this.grille[posX][posY].getDirt()!= Case.Dirt.POUSSIERE) {
+            if (this.grille[posX][posY].getDirt()==Case.Dirt.DIAMANT) {
+                this.grille[posX][posY].setDirt(Case.Dirt.MIXE);
             } else {
-                this.grille[posX][posY]=Dirt.POUSSIERE;
+                this.grille[posX][posY].setDirt(Case.Dirt.POUSSIERE);
             }
             return true;
         } else {
@@ -78,7 +64,7 @@ public class Maison {
     }
 
     public boolean isDirty(int i, int j) {
-        return grille[i][j] == Dirt.POUSSIERE;
+        return grille[i][j].getDirt() == Case.Dirt.POUSSIERE;
     }
     public int getWidth() {
         return width;
@@ -88,7 +74,10 @@ public class Maison {
         return height;
     }
 
-    public Dirt getDirt(int posX, int posY) {
+    public Case.Dirt getDirt(int posX, int posY) {
+        return this.grille[posX][posY].getDirt();
+    }
+    public Case getCase(int posX, int posY) {
         return this.grille[posX][posY];
     }
 }

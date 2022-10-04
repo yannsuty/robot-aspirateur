@@ -1,24 +1,26 @@
 package fr.uqac;
 //test
 import fr.uqac.front.MainFrame;
-import fr.uqac.model.Maison;
+import fr.uqac.model.Environnement;
+import fr.uqac.model.Robot;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        Maison maison = new Maison(5,5, 1);
+        Environnement maison = new Environnement(5,5, 1);
+        Robot robot = new Robot(maison);
         MainFrame mainFrame;
         int i = 0;
 
-        mainFrame = new MainFrame("Robot Aspirateur", new Dimension(400,600), maison);
+        mainFrame = new MainFrame("Robot Aspirateur", new Dimension(400,600), maison, robot);
         mainFrame.setVisible(true);
         while (mainFrame.isVisible()) {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
             maison.generateRandomDirt();
+            robot.randomMove();
+            System.out.println(robot.explorationNonInformee(maison.getCase(robot.getPosX(), robot.getPosY())));
             mainFrame.updateGUI();
-            maison.showGrille();
         }
     }
 }

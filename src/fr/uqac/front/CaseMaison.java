@@ -1,60 +1,71 @@
 package fr.uqac.front;
 
-import fr.uqac.model.Maison;
+import fr.uqac.model.Environnement;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class CaseMaison extends JPanel {
-    private Maison maison;
+    private Environnement maison;
     private int posX;
+    private boolean robot;
     private int posY;
-    public CaseMaison(int posX, int posY, Maison maison) {
+    public CaseMaison(int posX, int posY, Environnement maison) {
         super();
         this.maison = maison;
         this.posX = posX;
         this.posY = posY;
-
-        this.setLayout(new BorderLayout());
-        this.setBorder(BorderFactory.createLineBorder(Color.black));
-        this.add(new JLabel(posX + " : " + posY), BorderLayout.CENTER);
-
-        this.setBackground();
+        this.robot = false;
+        this.setMaximumSize(new Dimension(50,50));
     }
 
-    public void setBackground() {
+    @Override
+    public void paint(Graphics g) {
+        Graphics pencil = g.create();
+        //Background
         switch (this.maison.getDirt(this.posX, this.posY)) {
+            case PROPRE:
+                pencil.setColor(Color.WHITE);
+                break;
             case POUSSIERE:
-                this.setBackground(new Color(100,100,100));
+                pencil.setColor(new Color(100,100,100));
                 break;
             case DIAMANT:
-                this.setBackground(new Color(135,206,235));
+                pencil.setColor(new Color(10,100,130));
                 break;
             case MIXE:
-                this.setBackground(new Color(1,11,60));
+                pencil.setColor(new Color(1,11,60));
                 break;
         }
+        pencil.fillRect(0, 0, this.getWidth(), this.getHeight());
+        //Border
+        pencil.setColor(Color.BLACK);
+        pencil.fillRect(0,0,this.getWidth(),5);
+        pencil.fillRect(0,0,5,this.getHeight());
+//        pencil.fillRect(this.getWidth()-5,5, this.getWidth(), this.getHeight());
+//        pencil.fillRect(0,this.getHeight(),this.getWidth(),this.getHeight()-5);
+        //Robot
+        if (this.robot) {
+            pencil.setColor(Color.RED);
+            int width = this.getWidth();
+            int height = this.getHeight();
+            int rayon = width<height?width/2:height/2;
+            pencil.fillOval(width/2-rayon/2, height/2-rayon/2, rayon, rayon);
+        }
+    }
+    public void enableRobot() {
+        this.robot = true;
+    }
+    public void disableRobot() {
+        this.robot = false;
     }
     public void updateGUI() {
-        this.setBackground();
-        this.revalidate();
+//        this.setBackground();
+        this.repaint();
     }
 
-	public int getPosX() {
-		return posX;
-	}
-
-	public void setPosX(int posX) {
-		this.posX = posX;
-	}
-
-	public int getPosY() {
-		return posY;
-	}
-
-	public void setPosY(int posY) {
-		this.posY = posY;
-	}
-    
-    
+    @Override
+    public String toString() {
+        return "[CaseMaison]=" + this.posX + " : " + this.posY;
+    }
 }
