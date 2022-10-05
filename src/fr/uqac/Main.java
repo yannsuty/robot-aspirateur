@@ -24,6 +24,7 @@ public class Main {
                 while(mainFrame.isVisible()) {
                     synchronized (maison) {
                         maison.generateRandomDirt();
+                        maison.generateRandomJewel();
                     }
                     try {
                         Thread.sleep(10000);

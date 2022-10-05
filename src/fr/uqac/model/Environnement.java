@@ -40,13 +40,47 @@ public class Environnement {
         }while(!this.addDirt(posX, posY));
         System.out.println(posX + " : " + posY);
     }
-
+    
     public boolean addDirt(int posX, int posY) {
         if (this.grille[posX][posY].getDirt()!= Case.Dirt.POUSSIERE) {
             if (this.grille[posX][posY].getDirt()==Case.Dirt.DIAMANT) {
                 this.grille[posX][posY].setDirt(Case.Dirt.MIXE);
             } else {
                 this.grille[posX][posY].setDirt(Case.Dirt.POUSSIERE);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public void generateRandomJewel(int nb_jewel) {
+        int i =0;
+        while (i<nb_jewel) {
+            int posX = (int) (Math.floor(Math.random()*1000)%this.width);
+            int posY = (int) (Math.floor(Math.random()*1000)%this.height);
+            if (addJewel(posX, posY)) {
+                i++;
+            }
+        }
+    }
+    public void generateRandomJewel() {
+        int i=0;
+        int posX, posY;
+        do {
+            posX = (int) (Math.floor(Math.random()*1000)%this.width);
+            posY = (int) (Math.floor(Math.random()*1000)%this.height);
+            i++;
+        }while(!this.addJewel(posX, posY));
+        System.out.println(posX + " : " + posY);
+    }
+
+    public boolean addJewel(int posX, int posY) {
+        if (this.grille[posX][posY].getDirt()!= Case.Dirt.DIAMANT) {
+            if (this.grille[posX][posY].getDirt()==Case.Dirt.POUSSIERE) {
+                this.grille[posX][posY].setDirt(Case.Dirt.MIXE);
+            } else {
+                this.grille[posX][posY].setDirt(Case.Dirt.DIAMANT);
             }
             return true;
         } else {
