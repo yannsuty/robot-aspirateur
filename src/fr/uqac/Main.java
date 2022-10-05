@@ -24,6 +24,22 @@ public class Main {
                 while(mainFrame.isVisible()) {
                     synchronized (maison) {
                         maison.generateRandomDirt();
+                        
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }.start();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                while(mainFrame.isVisible()) {
+                    synchronized (maison) {
                         maison.generateRandomJewel();
                     }
                     try {
