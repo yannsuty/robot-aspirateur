@@ -16,14 +16,16 @@ public class Agent {
 	private Environnement maison;
 
 	public static Agent getInstance(Environnement maison) {
-		if (INSTANCE==null) {
+		if (INSTANCE == null) {
 			INSTANCE = new Agent(maison);
 		}
 		return INSTANCE;
 	}
+
 	public static Agent getInstance() {
 		return INSTANCE;
 	}
+
 	private Agent(Environnement maison) {
 		this.uniteElec = 0;
 		this.etatBDI = 0;
@@ -31,6 +33,7 @@ public class Agent {
 		this.posY = 0;
 		this.maison = maison;
 	}
+
 	public ArrayList<Noeud> explorationNonInformee(Case agent) {
 
 		Noeud racine = new Noeud(agent, null);
@@ -38,27 +41,28 @@ public class Agent {
 		ArrayList<Point> visit = new ArrayList<Point>();
 		stack.push(racine);
 
-		while(!stack.isEmpty()){
+		while (!stack.isEmpty()) {
 			Noeud n = stack.pop();
-			if(visit.contains(new Point(n.getC().getPosX(), n.getC().getPosY()))){
+			if (visit.contains(new Point(n.getC().getPosX(), n.getC().getPosY()))) {
 				n.setVisited(true);
 			}
-			if(!n.isVisited()){
+			if (!n.isVisited()) {
 				n.setVisited(true);
 				visit.add(new Point(n.getC().getPosX(), n.getC().getPosY()));
 				int posX = n.getC().getPosX();
 				int posY = n.getC().getPosY();
 
 				/* Robot sur case non vide */
-				if(this.maison.getDirt(posX,posY).getValue()>0){
+				if (this.maison.getDirt(posX, posY).getValue() > 0) {
 					ArrayList<Noeud> path = new ArrayList<Noeud>();
-					if(this.maison.getDirt(posX,posY)== Case.Dirt.DIAMANT){
-						path.add(new Noeud(this.maison.getCase(posX,posY),n, Noeud.Action.PICKUP));
+					if (this.maison.getDirt(posX, posY) == Case.Dirt.DIAMANT) {
+						path.add(new Noeud(this.maison.getCase(posX, posY), n, Noeud.Action.PICKUP));
 					}
-					if(this.maison.getDirt(posX,posY)== Case.Dirt.POUSSIERE || this.maison.getDirt(posX,posY)== Case.Dirt.MIXE){
-						path.add(new Noeud(this.maison.getCase(posX,posY),n,Noeud.Action.VACUUM));
+					if (this.maison.getDirt(posX, posY) == Case.Dirt.POUSSIERE
+							|| this.maison.getDirt(posX, posY) == Case.Dirt.MIXE) {
+						path.add(new Noeud(this.maison.getCase(posX, posY), n, Noeud.Action.VACUUM));
 					}
-					while(n.getParent() != null){
+					while (n.getParent() != null) {
 						path.add(n);
 						n = n.getParent();
 					}
@@ -68,30 +72,31 @@ public class Agent {
 				}
 
 				/* Mouvement Haut */
-				if(posX - 1 >= 0){
-					stack.push(new Noeud(this.maison.getCase(posX-1,posY),n, Noeud.Action.UP));
+				if (posX - 1 >= 0) {
+					stack.push(new Noeud(this.maison.getCase(posX - 1, posY), n, Noeud.Action.UP));
 				}
 
 				/* Mouvement Bas */
-				if(posX + 1 < 5){
-					stack.push(new Noeud(this.maison.getCase(posX+1,posY),n, Noeud.Action.DOWN));
+				if (posX + 1 < 5) {
+					stack.push(new Noeud(this.maison.getCase(posX + 1, posY), n, Noeud.Action.DOWN));
 				}
 
 				/* Mouvement Gauche */
-				if(posY - 1 >= 0){
-					stack.push(new Noeud(this.maison.getCase(posX,posY-1),n, Noeud.Action.LEFT));
+				if (posY - 1 >= 0) {
+					stack.push(new Noeud(this.maison.getCase(posX, posY - 1), n, Noeud.Action.LEFT));
 				}
 
 				/* Mouvement Droite */
-				if(posY + 1 < 5){
-					stack.push(new Noeud(this.maison.getCase(posX,posY+1),n, Noeud.Action.RIGHT));
+				if (posY + 1 < 5) {
+					stack.push(new Noeud(this.maison.getCase(posX, posY + 1), n, Noeud.Action.RIGHT));
 				}
 			}
 		}
 		return null;
 	}
+
 	public void randomMove() {
-		switch((int)(Math.ceil(Math.random()*4))) {
+		switch ((int) (Math.ceil(Math.random() * 4))) {
 			case 1:
 				moveUp();
 				break;
@@ -106,76 +111,92 @@ public class Agent {
 				break;
 		}
 	}
+
 	public void doAction(Noeud.Action action) {
 		switch (action) {
-			case UP -> moveUp();
-			case DOWN -> moveDown();
-			case LEFT -> moveLeft();
-			case RIGHT -> moveRight();
-			case PICKUP -> pickup();
-			case VACUUM -> vacuum();
+			case UP:
+				moveUp();
+				break;
+			case DOWN:
+				moveDown();
+				break;
+			case LEFT:
+				moveLeft();
+				break;
+			case RIGHT:
+				moveRight();
+				break;
+			case PICKUP:
+				pickup();
+				break;
+			case VACUUM:
+				vacuum();
+				break;
 		}
 	}
 
 	public void pickup() {
 		this.maison.clean(this.posX, this.posY);
 	}
+
 	public void vacuum() {
 		this.maison.clean(this.posX, this.posY);
 	}
+
 	public void moveLeft() {
-		if (this.posY -1 >=0) {
-			this.previousPosY=this.posY;
+		if (this.posY - 1 >= 0) {
+			this.previousPosY = this.posY;
 			this.posY--;
-		}
-		else System.out.println("erreur left");
+		} else
+			System.out.println("erreur left");
 	}
-	
+
 	public void moveRight() {
-		if (this.posY +1 <maison.getHeight()) {
-			this.previousPosY=this.posY;
+		if (this.posY + 1 < maison.getHeight()) {
+			this.previousPosY = this.posY;
 			this.posY++;
-		}
-		else System.out.println("erreur right");
+		} else
+			System.out.println("erreur right");
 	}
-	
+
 	public void moveDown() {
-		if (this.posX +1 <maison.getWidth()) {
-			this.previousPosX=this.posX;
+		if (this.posX + 1 < maison.getWidth()) {
+			this.previousPosX = this.posX;
 			this.posX++;
-		}
-		else System.out.println("erreur down");
+		} else
+			System.out.println("erreur down");
 	}
-	
+
 	public void moveUp() {
-		if (this.posX -1 >=0) {
-			this.previousPosX=this.posX;
+		if (this.posX - 1 >= 0) {
+			this.previousPosX = this.posX;
 			this.posX--;
-		}
-		else System.out.println("erreur up");
+		} else
+			System.out.println("erreur up");
 	}
+
 	int distanceManhanttan(int x1, int x2, int y1, int y2) {
 		return Math.abs(x2 - x1) + Math.abs(y2 - y1);
 	}
+
 	public void useElec() {
 		this.uniteElec++;
 	}
-		
-	
+
 	public void goodAction() {
 		this.etatBDI++;
 	}
-	
+
 	public void badAction() {
 		this.etatBDI--;
 	}
 
-//Getters
-	
+	// Getters
+
 	public int getPosX() {
 		return this.posX;
 	}
-	
+
 	public int getPosY() {
 		return this.posY;
 	}
@@ -191,7 +212,7 @@ public class Agent {
 	public int getUniteElec() {
 		return this.uniteElec;
 	}
-	
+
 	public int getEtatBDI() {
 		return this.etatBDI;
 	}
