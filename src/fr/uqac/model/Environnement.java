@@ -62,7 +62,17 @@ public class Environnement {
             System.out.println();
         }
     }
-
+    public void clean(int x, int y) {
+        this.grille[x][y].setDirt(Case.Dirt.PROPRE);
+    }
+    public boolean detect() {
+        for (int i=0; i<this.width;i++) {
+            for (int j=0;j<this.height; j++) {
+                if (this.grille[i][j].getDirt()!= Case.Dirt.PROPRE) return true;
+            }
+        }
+        return false;
+    }
     public boolean isDirty(int i, int j) {
         return grille[i][j].getDirt() == Case.Dirt.POUSSIERE;
     }

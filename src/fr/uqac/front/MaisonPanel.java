@@ -23,13 +23,6 @@ public class MaisonPanel extends JPanel {
             }
         }
     }
-    public void addRobot() {
-        this.casesMaison[this.robot.getPosX()][this.robot.getPosY()].enableRobot();
-    }
-    public void moveRobot() {
-        this.casesMaison[this.robot.getPreviousPosX()][this.robot.getPreviousPosY()].disableRobot();
-        this.casesMaison[this.robot.getPosX()][this.robot.getPosY()].enableRobot();
-    }
 
     public void updateGUI() {
         for (int i = 0; i< this.maison.getWidth(); i++) {
@@ -37,6 +30,5 @@ public class MaisonPanel extends JPanel {
                 this.casesMaison[i][j].updateGUI();
             }
         }
-        moveRobot();
     }
 }

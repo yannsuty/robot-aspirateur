@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Stack;
 
 public class Agent {
-	
+	private static Agent INSTANCE;
 	private int uniteElec;
 	private int etatBDI;
 	private int posX;
@@ -14,8 +14,17 @@ public class Agent {
 	private int previousPosX;
 	private int previousPosY;
 	private Environnement maison;
-	
-	public Agent(Environnement maison) {
+
+	public static Agent getInstance(Environnement maison) {
+		if (INSTANCE==null) {
+			INSTANCE = new Agent(maison);
+		}
+		return INSTANCE;
+	}
+	public static Agent getInstance() {
+		return INSTANCE;
+	}
+	private Agent(Environnement maison) {
 		this.uniteElec = 0;
 		this.etatBDI = 0;
 		this.posX = 0;
@@ -97,36 +106,53 @@ public class Agent {
 				break;
 		}
 	}
-	public void moveUp() {
-		if (this.posY -1 >0) {
+	public void doAction(Noeud.Action action) {
+		switch (action) {
+			case UP -> moveUp();
+			case DOWN -> moveDown();
+			case LEFT -> moveLeft();
+			case RIGHT -> moveRight();
+			case PICKUP -> pickup();
+			case VACUUM -> vacuum();
+		}
+	}
+
+	public void pickup() {
+		this.maison.clean(this.posX, this.posY);
+	}
+	public void vacuum() {
+		this.maison.clean(this.posX, this.posY);
+	}
+	public void moveLeft() {
+		if (this.posY -1 >=0) {
 			this.previousPosY=this.posY;
 			this.posY--;
 		}
-		else System.out.println("erreur up");
+		else System.out.println("erreur left");
 	}
 	
-	public void moveDown() {
+	public void moveRight() {
 		if (this.posY +1 <maison.getHeight()) {
 			this.previousPosY=this.posY;
 			this.posY++;
 		}
-		else System.out.println("erreur down");
+		else System.out.println("erreur right");
 	}
 	
-	public void moveRight() {
+	public void moveDown() {
 		if (this.posX +1 <maison.getWidth()) {
 			this.previousPosX=this.posX;
 			this.posX++;
 		}
-		else System.out.println("erreur right");
+		else System.out.println("erreur down");
 	}
 	
-	public void moveLeft() {
-		if (this.posX -1 >0) {
+	public void moveUp() {
+		if (this.posX -1 >=0) {
 			this.previousPosX=this.posX;
 			this.posX--;
 		}
-		else System.out.println("erreur left");
+		else System.out.println("erreur up");
 	}
 	int distanceManhanttan(int x1, int x2, int y1, int y2) {
 		return Math.abs(x2 - x1) + Math.abs(y2 - y1);
