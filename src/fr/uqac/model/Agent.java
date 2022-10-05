@@ -133,6 +133,8 @@ public class Agent {
 				vacuum();
 				break;
 		}
+		this.uniteElec++;
+		System.out.println("Unite elec :" + this.uniteElec);
 	}
 
 	public void pickup() {

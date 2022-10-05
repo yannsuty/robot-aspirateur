@@ -27,7 +27,7 @@ public class Main {
                         
                     }
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -43,7 +43,7 @@ public class Main {
                         maison.generateRandomJewel();
                     }
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(15000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
