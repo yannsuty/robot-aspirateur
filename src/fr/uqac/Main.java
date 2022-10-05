@@ -52,7 +52,8 @@ public class Main {
         }.start();
         while (mainFrame.isVisible()) {
             if (maison.detect()) {
-                ArrayList<Noeud> noeuds = robot.explorationNonInformee(maison.getCase(robot.getPosX(), robot.getPosY()));
+                ArrayList<Noeud> noeuds = robot.explorationInformee(maison.getCase(robot.getPosX(), robot.getPosY()));
+                System.out.println(noeuds);
                 while(!noeuds.isEmpty()) {
                     synchronized (maison) {
                         robot.doAction(noeuds.get(0).getAction());
@@ -66,6 +67,11 @@ public class Main {
                         throw new RuntimeException(e);
                     }
                 }
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }

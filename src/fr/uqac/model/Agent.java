@@ -58,9 +58,8 @@ public class Agent {
 					if (this.maison.getDirt(posX, posY) == Case.Dirt.DIAMANT) {
 						path.add(new Noeud(this.maison.getCase(posX, posY), n, Noeud.Action.PICKUP));
 					}
-					if (this.maison.getDirt(posX, posY) == Case.Dirt.POUSSIERE
-							|| this.maison.getDirt(posX, posY) == Case.Dirt.MIXE) {
-						path.add(new Noeud(this.maison.getCase(posX, posY), n, Noeud.Action.VACUUM));
+					if(this.maison.getDirt(posX,posY)== Case.Dirt.POUSSIERE || this.maison.getDirt(posX,posY)== Case.Dirt.MIXE){
+						path.add(new Noeud(this.maison.getCase(posX,posY),n,Noeud.Action.VACUUM));
 					}
 					while (n.getParent() != null) {
 						path.add(n);
@@ -77,8 +76,8 @@ public class Agent {
 				}
 
 				/* Mouvement Bas */
-				if (posX + 1 < 5) {
-					stack.push(new Noeud(this.maison.getCase(posX + 1, posY), n, Noeud.Action.DOWN));
+				if(posX + 1 < this.maison.getWidth()){
+					stack.push(new Noeud(this.maison.getCase(posX+1,posY),n, Noeud.Action.DOWN));
 				}
 
 				/* Mouvement Gauche */
@@ -87,14 +86,110 @@ public class Agent {
 				}
 
 				/* Mouvement Droite */
-				if (posY + 1 < 5) {
-					stack.push(new Noeud(this.maison.getCase(posX, posY + 1), n, Noeud.Action.RIGHT));
+				if(posY + 1 < this.maison.getHeight()){
+					stack.push(new Noeud(this.maison.getCase(posX,posY+1),n, Noeud.Action.RIGHT));
 				}
 			}
 		}
 		return null;
 	}
+	public ArrayList<Noeud> explorationInformee(Case agent) {
+		Noeud currentNode = new Noeud(agent, null);
 
+		Case goalCase = findNearestDirt(agent);
+		//Si rien n'est trouvé on quitte l'exploration
+		if (goalCase == null) return null;
+		Noeud goalNode = new Noeud(goalCase,null);
+		int goalPosX = goalNode.getC().getPosX();
+		int goalPosY = goalNode.getC().getPosY();
+
+		int miniumManhattanDistance = distanceManhanttan(currentNode.getC().getPosX(),
+				currentNode.getC().getPosY(),
+				goalPosX, goalPosY);
+		int distanceToGoal = miniumManhattanDistance;
+
+		while (true) {
+			//Si la case est
+			if(this.maison.getDirt(currentNode.getC().getPosX(),currentNode.getC().getPosY()).getValue()>0){
+				ArrayList<Noeud> path = new ArrayList<Noeud>();
+				if(this.maison.getDirt(posX,posY)== Case.Dirt.DIAMANT){
+					path.add(new Noeud(this.maison.getCase(currentNode.getC().getPosX(),currentNode.getC().getPosY()),
+							currentNode, Noeud.Action.PICKUP));
+				}
+				if(this.maison.getDirt(posX,posY)== Case.Dirt.POUSSIERE || this.maison.getDirt(posX,posY)== Case.Dirt.MIXE){
+					path.add(new Noeud(this.maison.getCase(currentNode.getC().getPosX(),currentNode.getC().getPosY()),
+							currentNode,Noeud.Action.VACUUM));
+				}
+				while(currentNode.getParent() != null){
+					path.add(currentNode);
+					currentNode = currentNode.getParent();
+				}
+				Collections.reverse(path);
+
+				return path;
+			}
+			//Haut
+			if (currentNode.getC().getPosX()-1>=0) {
+				int posHaut = currentNode.getC().getPosX()-1;
+				int hypotheticalDistanceToGoal = distanceManhanttan(posHaut, currentNode.getC().getPosY(), goalPosX, goalPosY);
+				if (hypotheticalDistanceToGoal<distanceToGoal) {
+					distanceToGoal=hypotheticalDistanceToGoal;
+					currentNode.setAction(Noeud.Action.UP);
+					currentNode.setParent(new Noeud(this.maison.getCase(posHaut, currentNode.getC().getPosY()), null));
+					currentNode = currentNode.getParent();
+				}
+			}
+			//Bas
+			if (currentNode.getC().getPosX()+1<this.maison.getWidth()) {
+				int posBas = currentNode.getC().getPosX()+1;
+				int hypotheticalDistanceToGoal = distanceManhanttan(posBas, currentNode.getC().getPosY(), goalPosX, goalPosY);
+				if (hypotheticalDistanceToGoal<distanceToGoal) {
+					distanceToGoal=hypotheticalDistanceToGoal;
+					currentNode.setAction(Noeud.Action.DOWN);
+					currentNode.setParent(new Noeud(this.maison.getCase(posBas, currentNode.getC().getPosY()), null));
+					currentNode = currentNode.getParent();
+				}
+			}
+			//Gauche
+			if (currentNode.getC().getPosY()-1>=0) {
+				int posGauche = currentNode.getC().getPosY()-1;
+				int hypotheticalDistanceToGoal = distanceManhanttan(currentNode.getC().getPosX(), posGauche, goalPosX, goalPosY);
+				if (hypotheticalDistanceToGoal<distanceToGoal) {
+					distanceToGoal=hypotheticalDistanceToGoal;
+					currentNode.setAction(Noeud.Action.LEFT);
+					currentNode.setParent(new Noeud(this.maison.getCase(currentNode.getC().getPosX(), posGauche), null));
+					currentNode = currentNode.getParent();
+				}
+			}
+			//Droite
+			if (currentNode.getC().getPosY()+1<this.maison.getHeight()) {
+				int posDroite = currentNode.getC().getPosY()+1;
+				int hypotheticalDistanceToGoal = distanceManhanttan(currentNode.getC().getPosX(), posDroite, goalPosX, goalPosY);
+				if (hypotheticalDistanceToGoal<distanceToGoal) {
+					distanceToGoal=hypotheticalDistanceToGoal;
+					currentNode.setAction(Noeud.Action.RIGHT);
+					currentNode.setParent(new Noeud(this.maison.getCase(currentNode.getC().getPosX(), posDroite), null));
+					currentNode = currentNode.getParent();
+				}
+			}
+		}
+	}
+	public Case findNearestDirt(Case depart) {
+		Case goal = null;
+		int distanceM = this.maison.getWidth()*this.maison.getHeight();
+		for (int i=0; i<this.maison.getWidth(); i++) {
+			for (int j=0; j<this.maison.getHeight(); j++) {
+				if (this.maison.getDirt(i,j).getValue()>0) {
+					int dM = distanceManhanttan(depart.getPosX(), depart.getPosY(), i,j);
+					if (dM<distanceM) {
+						goal = this.maison.getCase(i,j);
+						distanceM=dM;
+					}
+				}
+			}
+		}
+		return goal;
+	}
 	public void randomMove() {
 		switch ((int) (Math.ceil(Math.random() * 4))) {
 			case 1:
@@ -176,8 +271,7 @@ public class Agent {
 		} else
 			System.out.println("erreur up");
 	}
-
-	int distanceManhanttan(int x1, int x2, int y1, int y2) {
+	int distanceManhanttan(int x1, int y1, int x2, int y2) {
 		return Math.abs(x2 - x1) + Math.abs(y2 - y1);
 	}
 
