@@ -55,7 +55,7 @@ public class Agent {
 					if(this.maison.getDirt(posX,posY)== Case.Dirt.DIAMANT){
 						path.add(new Noeud(this.maison.getCase(posX,posY),n, Noeud.Action.PICKUP));
 					}
-					if(this.maison.getDirt(posX,posY)== Case.Dirt.POUSSIERE){
+					if(this.maison.getDirt(posX,posY)== Case.Dirt.POUSSIERE || this.maison.getDirt(posX,posY)== Case.Dirt.MIXE){
 						path.add(new Noeud(this.maison.getCase(posX,posY),n,Noeud.Action.VACUUM));
 					}
 					while(n.getParent() != null){
