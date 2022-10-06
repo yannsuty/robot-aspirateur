@@ -10,12 +10,25 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        Environnement manoir = new Environnement(5, 5, 1);
+        // On peut personnaliser la taille du manoir (width, height), l'apparition des
+        // saletés et diamants
+
+        int width = 5;
+        int height = 5;
+        int nb_dirt = 1; // le nombre de saleté apparaissant à la fois
+
+        int temp_apparition_dirt = 4000;
+        int temp_apparition_jewel = 8000;
+
+        Environnement manoir = new Environnement(width, height, nb_dirt);
         Agent robot = Agent.getInstance(manoir);
         MainFrame mainFrame;
 
         mainFrame = new MainFrame("IA TP1 : Robot Aspirateur", new Dimension(400, 600), manoir, robot);
         mainFrame.setVisible(true);
+
+        // Génère l'apparition aléatoire de la saleté tous les intervalles de temps
+        // temp_apparition_dirt (en ms)
         new Thread() {
             @Override
             public void run() {
@@ -26,13 +39,16 @@ public class Main {
 
                     }
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(temp_apparition_dirt);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 }
             }
         }.start();
+
+        // Génère l'apparition aléatoire des diamants tous les intervalles de temps
+        // temp_apparition_jewel (en ms)
         new Thread() {
             @Override
             public void run() {
@@ -42,7 +58,7 @@ public class Main {
                         manoir.generateRandomJewel();
                     }
                     try {
-                        Thread.sleep(15000);
+                        Thread.sleep(temp_apparition_jewel);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
