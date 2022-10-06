@@ -9,6 +9,7 @@ public class Agent {
 	private static Agent INSTANCE;
 	private int uniteElec;
 	private int etatBDI;
+	private int score;
 	private int posX;
 	private int posY;
 	private int previousPosX;
@@ -29,6 +30,7 @@ public class Agent {
 	private Agent(Environnement maison) {
 		this.uniteElec = 0;
 		this.etatBDI = 0;
+		this.score = 0;
 		this.posX = 0;
 		this.posY = 0;
 		this.maison = maison;
@@ -94,7 +96,9 @@ public class Agent {
 		return null;
 	}
 	public ArrayList<Noeud> explorationInformee(Case agent) {
+		Stack<Noeud> stack = new Stack<Noeud>();
 		Noeud currentNode = new Noeud(agent, null);
+		stack.push(currentNode);
 
 		Case goalCase = findNearestDirt(agent);
 		//Si rien n'est trouvé on quitte l'exploration
@@ -107,16 +111,19 @@ public class Agent {
 				currentNode.getC().getPosY(),
 				goalPosX, goalPosY);
 		int distanceToGoal = miniumManhattanDistance;
+		System.out.println("Distance Manhattan :" + miniumManhattanDistance);
 
-		while (true) {
-			//Si la case est
+		while (!stack.isEmpty()) {
+			currentNode = stack.pop();
+			//Si la case est occupée
 			if(this.maison.getDirt(currentNode.getC().getPosX(),currentNode.getC().getPosY()).getValue()>0){
 				ArrayList<Noeud> path = new ArrayList<Noeud>();
-				if(this.maison.getDirt(posX,posY)== Case.Dirt.DIAMANT){
+				if(this.maison.getDirt(currentNode.getC().getPosX(),currentNode.getC().getPosY())== Case.Dirt.DIAMANT){
 					path.add(new Noeud(this.maison.getCase(currentNode.getC().getPosX(),currentNode.getC().getPosY()),
 							currentNode, Noeud.Action.PICKUP));
 				}
-				if(this.maison.getDirt(posX,posY)== Case.Dirt.POUSSIERE || this.maison.getDirt(posX,posY)== Case.Dirt.MIXE){
+				if(this.maison.getDirt(currentNode.getC().getPosX(),currentNode.getC().getPosY())== Case.Dirt.POUSSIERE
+						|| this.maison.getDirt(currentNode.getC().getPosX(),currentNode.getC().getPosY())== Case.Dirt.MIXE){
 					path.add(new Noeud(this.maison.getCase(currentNode.getC().getPosX(),currentNode.getC().getPosY()),
 							currentNode,Noeud.Action.VACUUM));
 				}
@@ -133,10 +140,8 @@ public class Agent {
 				int posHaut = currentNode.getC().getPosX()-1;
 				int hypotheticalDistanceToGoal = distanceManhanttan(posHaut, currentNode.getC().getPosY(), goalPosX, goalPosY);
 				if (hypotheticalDistanceToGoal<distanceToGoal) {
+					stack.push(new Noeud(this.maison.getCase(posHaut, currentNode.getC().getPosY()), currentNode, Noeud.Action.UP));
 					distanceToGoal=hypotheticalDistanceToGoal;
-					currentNode.setAction(Noeud.Action.UP);
-					currentNode.setParent(new Noeud(this.maison.getCase(posHaut, currentNode.getC().getPosY()), null));
-					currentNode = currentNode.getParent();
 				}
 			}
 			//Bas
@@ -144,10 +149,8 @@ public class Agent {
 				int posBas = currentNode.getC().getPosX()+1;
 				int hypotheticalDistanceToGoal = distanceManhanttan(posBas, currentNode.getC().getPosY(), goalPosX, goalPosY);
 				if (hypotheticalDistanceToGoal<distanceToGoal) {
+					stack.push(new Noeud(this.maison.getCase(posBas, currentNode.getC().getPosY()), currentNode, Noeud.Action.DOWN));
 					distanceToGoal=hypotheticalDistanceToGoal;
-					currentNode.setAction(Noeud.Action.DOWN);
-					currentNode.setParent(new Noeud(this.maison.getCase(posBas, currentNode.getC().getPosY()), null));
-					currentNode = currentNode.getParent();
 				}
 			}
 			//Gauche
@@ -155,10 +158,8 @@ public class Agent {
 				int posGauche = currentNode.getC().getPosY()-1;
 				int hypotheticalDistanceToGoal = distanceManhanttan(currentNode.getC().getPosX(), posGauche, goalPosX, goalPosY);
 				if (hypotheticalDistanceToGoal<distanceToGoal) {
+					stack.push(new Noeud(this.maison.getCase(currentNode.getC().getPosX(), posGauche), currentNode, Noeud.Action.LEFT));
 					distanceToGoal=hypotheticalDistanceToGoal;
-					currentNode.setAction(Noeud.Action.LEFT);
-					currentNode.setParent(new Noeud(this.maison.getCase(currentNode.getC().getPosX(), posGauche), null));
-					currentNode = currentNode.getParent();
 				}
 			}
 			//Droite
@@ -166,13 +167,12 @@ public class Agent {
 				int posDroite = currentNode.getC().getPosY()+1;
 				int hypotheticalDistanceToGoal = distanceManhanttan(currentNode.getC().getPosX(), posDroite, goalPosX, goalPosY);
 				if (hypotheticalDistanceToGoal<distanceToGoal) {
+					stack.push(new Noeud(this.maison.getCase(currentNode.getC().getPosX(), posDroite), currentNode, Noeud.Action.RIGHT));
 					distanceToGoal=hypotheticalDistanceToGoal;
-					currentNode.setAction(Noeud.Action.RIGHT);
-					currentNode.setParent(new Noeud(this.maison.getCase(currentNode.getC().getPosX(), posDroite), null));
-					currentNode = currentNode.getParent();
 				}
 			}
 		}
+		return null;
 	}
 	public Case findNearestDirt(Case depart) {
 		Case goal = null;
@@ -228,15 +228,19 @@ public class Agent {
 				vacuum();
 				break;
 		}
-		this.uniteElec++;
-		System.out.println("Unite elec :" + this.uniteElec);
+		this.useElec();
+		System.out.println("Unite elec : " + this.uniteElec + " score : " + this.score);
 	}
 
 	public void pickup() {
+		this.score += 1;
 		this.maison.clean(this.posX, this.posY);
 	}
 
 	public void vacuum() {
+		if (this.maison.getDirt(this.posX, this.posY)== Case.Dirt.MIXE) {
+			this.score -= 1;
+		} else this.score += 1;
 		this.maison.clean(this.posX, this.posY);
 	}
 

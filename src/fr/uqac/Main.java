@@ -24,7 +24,7 @@ public class Main {
                 while(mainFrame.isVisible()) {
                     synchronized (maison) {
                         maison.generateRandomDirt();
-                        
+
                     }
                     try {
                         Thread.sleep(10000);
@@ -62,7 +62,7 @@ public class Main {
                         System.out.println(noeuds);
                     }
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(800);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
