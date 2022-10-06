@@ -1,22 +1,30 @@
 package fr.uqac.model;
 
+/**
+ * Cette classe permet de mettre en place les cases afin de les remplir de
+ * saletés et de diamants, d'un mixte des deux et de cases propres (vides)
+ */
 public class Case {
 
     public enum Dirt {
         PROPRE(0), POUSSIERE(1), DIAMANT(2), MIXE(3);
 
         private int value;
+
         Dirt(int value) {
             this.value = value;
         }
+
         public int getValue() {
             return this.value;
         }
+
         @Override
         public String toString() {
-            return value+"";
+            return value + "";
         }
     }
+
     private int posX;
     private int posY;
 
@@ -26,8 +34,8 @@ public class Case {
     public Case(int x, int y) {
         this.robot = false;
         this.dirt = Dirt.PROPRE;
-        this.posX=x;
-        this.posY=y;
+        this.posX = x;
+        this.posY = y;
     }
 
     public Dirt getDirt() {
@@ -35,7 +43,7 @@ public class Case {
     }
 
     public void setDirt(Dirt dirt) {
-        this.dirt =dirt;
+        this.dirt = dirt;
     }
 
     public int getPosX() {
