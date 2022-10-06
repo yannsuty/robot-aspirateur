@@ -14,7 +14,7 @@ public class Main {
         Agent robot = Agent.getInstance(manoir);
         MainFrame mainFrame;
 
-        mainFrame = new MainFrame("Robot Aspirateur", new Dimension(400, 600), manoir, robot);
+        mainFrame = new MainFrame("IA TP1 : Robot Aspirateur", new Dimension(400, 600), manoir, robot);
         mainFrame.setVisible(true);
         new Thread() {
             @Override
