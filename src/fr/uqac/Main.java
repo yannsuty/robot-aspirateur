@@ -69,7 +69,8 @@ public class Main {
         // Tant que le robot et le manoir sont présents, le programme tourne
 
         while (mainFrame.isVisible() && robot.AmIAlive()) {
-            // On effecture un test de désir afin de savoir si le manoir, auquel cas, le
+            // On effecture un test de désir afin de savoir si le manoir doit être nettoyé,
+            // auquel cas, le
             // robot agit dans le but de le nettoyer
             if (manoir.desires()) {
                 // Les séries d'actions constituent les intentions du robot

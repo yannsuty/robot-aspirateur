@@ -12,7 +12,7 @@ public class Environnement {
     private int height;
 
     public Environnement(int width, int height) {
-        this(width, height, 2);
+        this(width, height, 1);
     }
 
     public Environnement(int width, int height, int nb_dirt) {
